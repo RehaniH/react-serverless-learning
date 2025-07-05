@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   StyledCharacter,
   StyledGame,
@@ -7,14 +7,20 @@ import {
 } from "../styled/Game";
 
 import { Strong } from "../styled/Random";
+import { useScore } from "../context/ScoreContext";
 
 export default function Game({ history }) {
-  const [score, setScore] = useState(1);
-  const MAX_SECONDS = 90;
+  const MAX_SECONDS = 5;
+  const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const [currentCharacter, setCurrentCharacter] = useState("");
+
+  const [score, setScore] = useScore();
   const [ms, setMs] = useState(0);
   const [seconds, setSeconds] = useState(MAX_SECONDS); // count down timer
 
   useEffect(() => {
+    setScore(0); // reset score
+    setRandomCharacter();
     const currentTime = new Date();
     const interval = setInterval(() => updateTime(currentTime), 1);
 
@@ -55,13 +61,25 @@ export default function Game({ history }) {
 
   useEffect(() => {
     if (seconds <= -1) {
+      //Todo: save the score
       history.push("/gameOver");
     }
   }, [seconds, ms, history]);
 
-  const keyUpHandler = (e) => {
-    console.log(e.key);
-  };
+  const keyUpHandler = useCallback(
+    (e) => {
+      console.log(e.key, currentCharacter);
+      if (e.key === currentCharacter) {
+        setScore((prevScore) => prevScore + 1);
+      } else {
+        if (score > 0) {
+          setScore((prevScore) => prevScore - 1);
+        }
+      }
+      setRandomCharacter();
+    },
+    [currentCharacter]
+  );
 
   useEffect(() => {
     document.addEventListener("keyup", keyUpHandler);
@@ -69,14 +87,19 @@ export default function Game({ history }) {
     return () => {
       document.removeEventListener("keyup", keyUpHandler);
     };
-  }, []);
+  }, [keyUpHandler]);
+
+  const setRandomCharacter = () => {
+    const randomInt = Math.floor(Math.random() * 36);
+    setCurrentCharacter(characters[randomInt]);
+  };
 
   return (
     <StyledGame>
       <StyledScore>
         Score:<Strong>{score}</Strong>
       </StyledScore>
-      <StyledCharacter>A</StyledCharacter>
+      <StyledCharacter>{currentCharacter}</StyledCharacter>
       <StyledTimer>
         Time:
         <Strong>
