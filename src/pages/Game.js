@@ -27,6 +27,7 @@ export default function Game({ history }) {
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); //array used to make sure it is run just once
 
   const updateTime = (startTime) => {

@@ -3,7 +3,7 @@ import { useScore } from "../context/ScoreContext";
 import { StyledLink } from "../styled/Navbar";
 
 export default function GameOver({ history }) {
-  const [score, setScore] = useScore();
+  const [score] = useScore();
 
   if (score === -1) {
     history.push("/");
