@@ -11,7 +11,11 @@ const table = base(process.env.AIRTABLE_TABLE || "");
 
 exports.handler = async (event) => {
   try {
-    const highScores = await table.select({}).firstPage();
+    const highScores = await table
+      .select({
+        sort: [{ field: "score", direction: "desc" }],
+        filterByFormula: `AND(name != '', score > 0)` })
+      .firstPage();
 
     const formattedScores = highScores.map((record) => {
       return {
