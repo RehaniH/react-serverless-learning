@@ -1,32 +1,12 @@
-const Airtable = require("airtable");
-const dotenv = require("dotenv");
-dotenv.config();
-
-Airtable.configure({
-  apiKey: process.env.AIRTABLE_API_KEY || "",
-});
-
-const base = Airtable.base(process.env.AIRTABLE_BASE || "");
-const table = base(process.env.AIRTABLE_TABLE || "");
+const { getHighScores } = require("./utils/airtable");
 
 exports.handler = async (event) => {
   try {
-    const highScores = await table
-      .select({
-        sort: [{ field: "score", direction: "desc" }],
-        filterByFormula: `AND(name != '', score > 0)` })
-      .firstPage();
-
-    const formattedScores = highScores.map((record) => {
-      return {
-        id: record.id,
-        feilds: record.fields,
-      };
-    });
+    const highScores = await getHighScores(true);
 
     return {
       statusCode: 200,
-      body: JSON.stringify(formattedScores),
+      body: JSON.stringify(highScores),
     };
   } catch (error) {
     return {

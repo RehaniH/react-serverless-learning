@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {ScoreLI, ScoreOL} from "../styled/HighScores"
+import { ScoreLI, ScoreOL } from "../styled/HighScores";
 
 export default function HighScores() {
   const [highScores, setHighScores] = useState([]);
@@ -10,6 +10,7 @@ export default function HighScores() {
       try {
         const res = await fetch("/.netlify/functions/getHighScores");
         const scores = await res.json();
+        console.log(scores);
         setHighScores(scores);
       } catch (err) {
         console.error("failed to fetch highscores: ", err);
@@ -25,7 +26,7 @@ export default function HighScores() {
       <ScoreOL>
         {highScores.map((score) => (
           <ScoreLI key={score.id}>
-            {score.feilds.name} - {score.feilds.score}
+            {score.fields.name} - {score.fields.score}
           </ScoreLI>
         ))}
       </ScoreOL>
