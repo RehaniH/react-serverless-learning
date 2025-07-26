@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useScore } from "../context/ScoreContext";
 import { StyledLink } from "../styled/Navbar";
 import { StyledCharacter } from "../styled/Game";
+import { StyledTitle } from "../styled/Random";
 
 export default function GameOver({ history }) {
   const [score] = useScore();
@@ -11,38 +12,44 @@ export default function GameOver({ history }) {
     history.push("/");
   }
 
-    useEffect(() => {
-        const saveHighScore = async () => {
-            try {
-                const options = {
-                    method: 'POST',
-                    body: JSON.stringify({ name: 'Sasha', score }),
-                };
-                const res = await fetch(
-                    '/.netlify/functions/saveHighScores',
-                    options
-                );
-
-                const data = await res.json();
-                if (data.id) {
-                    setScoreMessage('Congrats! You got a high score!!');
-                } else {
-                    setScoreMessage('Sorry, not a high score. Keep trying!');
-                }
-            } catch (err) {
-                console.error(err);
-            }
+  useEffect(() => {
+    const saveHighScore = async () => {
+      try {
+        const options = {
+          method: "POST",
+          body: JSON.stringify({ name: "Sasha", score }),
         };
-        saveHighScore();
-    }, [score]);
+        const res = await fetch("/.netlify/functions/saveHighScores", options);
+
+        let data;
+        if (parseInt(res.headers.get("content-length"), 10) > 0) {
+          data = await res.json();
+        }
+
+        if (data?.id) {
+          setScoreMessage("Congrats! You got a high score!!");
+        } else {
+          setScoreMessage("Sorry, not a high score. Keep trying!");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    saveHighScore();
+  }, [score]);
 
   return (
     <div>
-      <h1>GameOver</h1>
+      <StyledTitle>GameOver</StyledTitle>
+      <h2>{scoreMessage}</h2>
       <StyledCharacter>{score}</StyledCharacter>
-      <p>{scoreMessage}</p>
-      <StyledLink to="/">Go Home</StyledLink>
-      <StyledLink to="/game">Play Again</StyledLink>
+      <div>
+        <StyledLink to="/">Go Home</StyledLink>
+      </div>
+
+      <div>
+        <StyledLink to="/game">Play Again</StyledLink>
+      </div>
     </div>
   );
 }
