@@ -12,6 +12,8 @@ ReactDOM.render(
       clientId="JA4wWjnHH5uUG3hdKvqQqUv59bmn9kNy"
       authorizationParams={{
         redirect_uri: window.location.origin,
+        audience: "https://learn-build-type-xjb",
+        scope: "read:current_user update:current_user_metadata",
       }}
     >
       <ScoreProvider>

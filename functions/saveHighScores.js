@@ -10,7 +10,7 @@ exports.handler = async (event) => {
 
   const { name, score } = JSON.parse(event.body);
 
-  if (typeof score === 'undefined' || !name) {
+  if (typeof score === "undefined" || !name) {
     return {
       statusCode: 400,
       body: JSON.stringify({ err: "Bad Request" }),
@@ -36,12 +36,16 @@ exports.handler = async (event) => {
       };
 
       await table.update([updatedRecord]);
+      return {
+        statusCode: 201,
+        body: JSON.stringify(updatedRecord),
+      };
+    } else {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({}),
+      };
     }
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify(updatedRecord),
-    };
   } catch (error) {
     return {
       statusCode: 500,

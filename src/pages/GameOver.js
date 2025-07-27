@@ -28,12 +28,12 @@ export default function GameOver({ history }) {
         };
         const res = await fetch("/.netlify/functions/saveHighScores", options);
 
-        let data;
-        if (parseInt(res.headers.get("content-length"), 10) > 0) {
-          data = await res.json();
-        }
+        // let data;
+        // if (parseInt(res.headers.get("content-length"), 10) > 0) {
+        //   data = await res.json();
+        // }
 
-        if (data?.id) {
+        if (res.status === 201) {
           setScoreMessage("Congrats! You got a high score!!");
         } else {
           setScoreMessage("Sorry, not a high score. Keep trying!");
