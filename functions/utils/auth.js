@@ -1,7 +1,7 @@
 const jwks = require("jwks-rsa");
 const jwt = require("jsonwebtoken");
 const jwksClient = jwks({
-  jwksUri: `${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+  jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
   audience: process.env.AUTH0_AUDIENCE,
 });
 
