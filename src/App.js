@@ -12,6 +12,7 @@ import Global from "./styled/Global";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./styled/Theme";
+import { Loader } from "./styled/Loader";
 import useTheme from "./hooks/useTheme";
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
       <ThemeProvider theme={currentTheme}>
         <Global />
         <Main>
-          {isLoading && <div>Loading ...</div>}
+          {isLoading && <Loader>Loading ...</Loader>}
 
           {!isLoading && (
             <Container>

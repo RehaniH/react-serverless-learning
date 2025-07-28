@@ -34,3 +34,14 @@ export const StyledLink = styled(Link)`
     color: var(--accent-color);
   }
 `;
+
+export const ButtonStyledLink = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--accent-color);
+  }
+`;
