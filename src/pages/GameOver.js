@@ -21,7 +21,7 @@ export default function GameOver({ history }) {
         console.log(token);
         const options = {
           method: "POST",
-          body: JSON.stringify({ name: "Sasha", score }),
+          body: JSON.stringify({ score }),
           headers: {
             authorization: `Bearer ${token}`,
           },
@@ -46,7 +46,7 @@ export default function GameOver({ history }) {
     if (isAuthenticated) {
       saveHighScore();
     }
-  }, [score]);
+  }, [score, isAuthenticated]);
 
   return (
     <div>

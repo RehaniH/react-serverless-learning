@@ -1,6 +1,16 @@
 const { table, getHighScores } = require("./utils/airtable");
+const { getAuthHeader, validateToken } = require("./utils/auth");
 
 exports.handler = async (event) => {
+  const jwtToken = getAuthHeader(event.headers);
+  const user = await validateToken(jwtToken);
+
+  if (!user) {
+    return {
+      statusCode: 403,
+      body: JSON.stringify({ err: "Unauthorised" }),
+    };
+  }
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -8,9 +18,10 @@ exports.handler = async (event) => {
     };
   }
 
-  const { name, score } = JSON.parse(event.body);
+  const { score } = JSON.parse(event.body);
+  const name = user["http://learnbuildtype//username"];
 
-  if (typeof score === "undefined" || !name) {
+  if (typeof score === "undefined") {
     return {
       statusCode: 400,
       body: JSON.stringify({ err: "Bad Request" }),
