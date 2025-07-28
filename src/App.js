@@ -10,29 +10,34 @@ import { Container } from "./styled/Container";
 import { Main } from "./styled/Main";
 import Global from "./styled/Global";
 import { useAuth0 } from "@auth0/auth0-react";
+import { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "./styled/Theme";
 // import "./App.css";
 
 function App() {
   const { isLoading } = useAuth0();
-
+  const theme = "dark";
+  const currentTheme = theme === "light" ? lightTheme : darkTheme;
   return (
     <Router>
-      <Global />
-      <Main>
-        {isLoading && <div>Loading ...</div>}
+      <ThemeProvider theme={currentTheme}>
+        <Global />
+        <Main>
+          {isLoading && <div>Loading ...</div>}
 
-        {!isLoading && (
-          <Container>
-            <Navbar />
-            <Switch>
-              <Route path="/game" component={Game} />
-              <Route path="/highScores" component={HighScores} />
-              <Route path="/gameOver" component={GameOver} />
-              <Route path="/" component={Home} />
-            </Switch>
-          </Container>
-        )}
-      </Main>
+          {!isLoading && (
+            <Container>
+              <Navbar />
+              <Switch>
+                <Route path="/game" component={Game} />
+                <Route path="/highScores" component={HighScores} />
+                <Route path="/gameOver" component={GameOver} />
+                <Route path="/" component={Home} />
+              </Switch>
+            </Container>
+          )}
+        </Main>
+      </ThemeProvider>
     </Router>
   );
 }
