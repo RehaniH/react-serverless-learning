@@ -14,22 +14,24 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
   const { isLoading } = useAuth0();
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
+
   return (
     <Router>
       <Global />
       <Main>
-        <Container>
-          <Navbar />
-          <Switch>
-            <Route path="/game" component={Game} />
-            <Route path="/highScores" component={HighScores} />
-            <Route path="/gameOver" component={GameOver} />
-            <Route path="/" component={Home} />
-          </Switch>
-        </Container>
+        {isLoading && <div>Loading ...</div>}
+
+        {!isLoading && (
+          <Container>
+            <Navbar />
+            <Switch>
+              <Route path="/game" component={Game} />
+              <Route path="/highScores" component={HighScores} />
+              <Route path="/gameOver" component={GameOver} />
+              <Route path="/" component={Home} />
+            </Switch>
+          </Container>
+        )}
       </Main>
     </Router>
   );
